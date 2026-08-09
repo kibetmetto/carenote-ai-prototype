@@ -1,0 +1,231 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CareNote AI Prototype v1</title>
+<style>
+:root{
+  --bg:#f5f8fc; --card:#ffffff; --text:#17324d; --muted:#6f8296;
+  --blue:#2f6fe4; --blue2:#eaf2ff; --green:#28a66a; --amber:#d9901a;
+  --purple:#7b61d1; --line:#dce6f1; --danger:#c84a4a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:0 0 40px rgba(30,60,90,.12)}
+.topbar{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:white;z-index:4}
+.brand{font-weight:800;font-size:20px}.brand span{color:var(--blue)}
+.screen{display:none;padding:18px 18px 90px}.screen.active{display:block}
+h1{font-size:24px;margin:6px 0 4px}h2{font-size:18px;margin:18px 0 10px}.sub{color:var(--muted);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 6px 20px rgba(35,70,100,.05)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{padding:14px;border-radius:16px;background:#f9fbfe;border:1px solid var(--line)}
+.stat b{display:block;font-size:22px;margin-top:4px}
+.btn{width:100%;border:0;border-radius:14px;padding:15px 16px;font-weight:700;font-size:16px;cursor:pointer;margin-top:10px}
+.primary{background:var(--blue);color:white}.secondary{background:var(--blue2);color:var(--blue)}
+.ghost{background:#f5f8fc;color:var(--text);border:1px solid var(--line)}
+.danger{background:#fff0f0;color:var(--danger)}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quick button{padding:16px;border-radius:16px;border:1px solid var(--line);background:white;text-align:left;font-weight:700;color:var(--text)}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;font:inherit;color:var(--text);background:white}
+textarea{min-height:100px;resize:vertical}
+.progress{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.pill{white-space:nowrap;font-size:12px;padding:7px 10px;border-radius:999px;background:#f1f5f9;color:var(--muted);border:1px solid var(--line)}
+.pill.done{background:#eaf8f1;color:var(--green);border-color:#ccebdc}
+.timeline{position:relative;margin-top:10px}
+.event{border-left:3px solid var(--blue);padding:0 0 0 14px;margin:14px 0}
+.event small{color:var(--muted)} .event b{display:block;margin:2px 0 4px}
+.mic{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;width:66px;height:66px;border-radius:50%;border:0;background:var(--purple);color:#fff;font-size:28px;box-shadow:0 10px 24px rgba(70,50,160,.3);z-index:5;cursor:pointer}
+.bottom-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.listen{width:110px;height:110px;border-radius:50%;background:var(--purple);color:white;display:flex;align-items:center;justify-content:center;font-size:42px;margin:28px auto 14px;box-shadow:0 14px 30px rgba(90,60,180,.25)}
+.note{background:#f9fbfe;border:1px solid var(--line);border-radius:14px;padding:14px;line-height:1.55}
+.badge{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.green{background:#eaf8f1;color:var(--green)}.amber{background:#fff5e5;color:var(--amber)}
+.footer-note{font-size:12px;color:var(--muted);text-align:center;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">CareNote <span>AI</span></div>
+    <div id="status" class="badge green">Prototype v1</div>
+  </div>
+
+  <section id="home" class="screen active">
+    <div class="sub">Good evening</div>
+    <h1>Ready for your shift?</h1>
+    <div class="grid">
+      <div class="stat"><span class="sub">Outstanding notes</span><b>1</b></div>
+      <div class="stat"><span class="sub">Incident drafts</span><b>0</b></div>
+    </div>
+    <div class="card">
+      <b>Today</b>
+      <p class="sub">No active shift</p>
+      <button class="btn primary" onclick="go('start')">+ Start New Shift</button>
+    </div>
+    <h2>Quick actions</h2>
+    <div class="quick">
+      <button onclick="go('voice')">🎤<br/>Voice Capture</button>
+      <button onclick="alert('Incident flow will be added in Prototype v2')">⚠️<br/>Incident Report</button>
+      <button onclick="go('history')">📄<br/>Previous Notes</button>
+      <button onclick="alert('Reminder centre will be added in Prototype v2')">⏰<br/>Reminders</button>
+    </div>
+    <p class="footer-note">Capture in the moment. Document with confidence.</p>
+  </section>
+
+  <section id="start" class="screen">
+    <button class="btn ghost" onclick="go('home')">← Back</button>
+    <h1>Start New Shift</h1>
+    <p class="sub">Only the essentials.</p>
+    <label>Participant ID / initials</label>
+    <input id="participant" value="M****"/>
+    <label>Shift type</label>
+    <select><option>Afternoon</option><option>Morning</option><option>Evening</option><option>Night</option></select>
+    <div class="grid">
+      <div><label>Start time</label><input value="2:00 PM"/></div>
+      <div><label>Expected finish</label><input value="9:00 PM"/></div>
+    </div>
+    <label>Optional handover note</label>
+    <textarea placeholder="Short handover summary..."></textarea>
+    <button class="btn primary" onclick="go('timeline')">Start Shift</button>
+  </section>
+
+  <section id="timeline" class="screen">
+    <div class="sub">Current shift</div>
+    <h1>2:00 PM — 9:00 PM</h1>
+    <p class="sub">Participant: <span id="pDisplay">M****</span></p>
+
+    <h2>Documentation progress</h2>
+    <div class="progress">
+      <span class="pill done">✓ Activities</span>
+      <span class="pill done">✓ Meals</span>
+      <span class="pill done">✓ Medication</span>
+      <span class="pill">Personal Care</span>
+      <span class="pill">Handover</span>
+    </div>
+
+    <h2>Smart Timeline</h2>
+    <div class="timeline" id="timelineEvents">
+      <div class="event"><small>2:05 PM · Handover</small><b>Shift commenced</b><span class="sub">Received handover and participant was settled.</span></div>
+      <div class="event"><small>3:15 PM · Community Access</small><b>Community drive</b><span class="sub">Community drive facilitated. Participant remained calm.</span></div>
+      <div class="event"><small>5:30 PM · Meal</small><b>Dinner provided</b><span class="sub">Sausages and vegetables offered. Participant ate well.</span></div>
+      <div class="event"><small>7:00 PM · Medication</small><b>Scheduled medication</b><span class="sub">Medication event recorded.</span></div>
+    </div>
+
+    <div class="bottom-actions">
+      <button class="btn secondary" onclick="addEvent()">+ Add Event</button>
+      <button class="btn primary" onclick="go('reviewShift')">Generate Note</button>
+    </div>
+    <button class="mic" onclick="go('voice')" aria-label="Voice capture">🎤</button>
+  </section>
+
+  <section id="voice" class="screen">
+    <button class="btn ghost" onclick="go('timeline')">← Back to Timeline</button>
+    <h1>Voice Capture</h1>
+    <p class="sub">Speak naturally. CareNote AI will organise the event for you.</p>
+    <div class="listen">🎤</div>
+    <div class="card">
+      <b>Listening...</b>
+      <p class="sub" id="transcript">“At around 8:20 pm Mitchell had a shower and changed into night clothes.”</p>
+    </div>
+    <button class="btn primary" onclick="go('aiReview')">Use Transcript</button>
+    <button class="btn ghost" onclick="go('timeline')">Cancel</button>
+  </section>
+
+  <section id="aiReview" class="screen">
+    <button class="btn ghost" onclick="go('voice')">← Back</button>
+    <h1>Review AI suggestion</h1>
+    <p class="sub">AI suggests. You confirm.</p>
+    <div class="card">
+      <label>Time</label><input value="8:20 PM"/>
+      <label>Category</label><select><option>Personal Care</option><option>Activity</option><option>Meal</option><option>Medication</option></select>
+      <label>Summary</label><input value="Evening personal care"/>
+      <label>Details</label><textarea>Participant was supported with a shower and changed into night clothing.</textarea>
+    </div>
+    <button class="btn primary" onclick="confirmEvent()">Add to Timeline</button>
+    <button class="btn danger" onclick="go('timeline')">Discard</button>
+  </section>
+
+  <section id="reviewShift" class="screen">
+    <button class="btn ghost" onclick="go('timeline')">← Back to Timeline</button>
+    <h1>End-of-shift review</h1>
+    <div class="card">
+      <b>5 confirmed events</b>
+      <p class="sub">Your timeline is ready to generate into a professional note.</p>
+    </div>
+    <div class="card">
+      <span class="badge amber">Possible gap</span>
+      <h2 style="margin-top:10px">No handover event recorded</h2>
+      <p class="sub">Add one if relevant to this shift.</p>
+      <button class="btn secondary" onclick="addHandover()">+ Add Handover</button>
+    </div>
+    <button class="btn primary" onclick="go('generated')">✨ Generate Professional Note</button>
+  </section>
+
+  <section id="generated" class="screen">
+    <button class="btn ghost" onclick="go('reviewShift')">← Back</button>
+    <h1>Review generated note</h1>
+    <p class="sub">Check accuracy before finalising.</p>
+    <div class="note" contenteditable="true">
+      Shift commenced at 2:00 PM. Handover was received and the participant was settled. At approximately 3:15 PM, a community drive was facilitated and the participant remained calm throughout. Dinner was provided at approximately 5:30 PM, consisting of sausages and vegetables, which the participant ate well. Scheduled medication was recorded at 7:00 PM. At approximately 8:20 PM, the participant was supported with evening personal care, including a shower and change into night clothing. The participant remained settled toward the end of the shift.
+    </div>
+    <label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px">
+      <input type="checkbox" id="confirm" style="width:auto;margin-top:3px"/>
+      <span>I have reviewed this note and confirm it accurately reflects the shift.</span>
+    </label>
+    <button class="btn primary" onclick="finalise()">Finalise Note</button>
+  </section>
+
+  <section id="history" class="screen">
+    <button class="btn ghost" onclick="go('home')">← Back</button>
+    <h1>Notes History</h1>
+    <div class="card"><span class="badge green">Completed</span><h2>8 Aug · 2 PM–9 PM</h2><p class="sub">Participant M****</p></div>
+    <div class="card"><span class="badge amber">Draft</span><h2>7 Aug · 9 PM–7 AM</h2><p class="sub">Participant M****</p></div>
+  </section>
+
+  <section id="done" class="screen">
+    <h1>Note finalised ✓</h1>
+    <div class="card">
+      <b>Shift documentation complete</b>
+      <p class="sub">The note has been reviewed and finalised in this prototype.</p>
+    </div>
+    <button class="btn secondary" onclick="go('history')">View Notes History</button>
+    <button class="btn primary" onclick="go('home')">Return Home</button>
+    <p class="footer-note">Better documentation. Less chasing. Stronger care.</p>
+  </section>
+</div>
+
+<script>
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  const p=document.getElementById('participant');
+  if(p && document.getElementById('pDisplay')) document.getElementById('pDisplay').textContent=p.value||'M****';
+}
+function addEvent(){
+  alert('Prototype interaction: typed event form will be added next. Use the microphone to test the signature workflow.');
+}
+function confirmEvent(){
+  const wrap=document.getElementById('timelineEvents');
+  const div=document.createElement('div');
+  div.className='event';
+  div.innerHTML='<small>8:20 PM · Personal Care</small><b>Evening personal care</b><span class="sub">Participant was supported with a shower and changed into night clothing.</span>';
+  wrap.appendChild(div);
+  go('timeline');
+}
+function addHandover(){
+  alert('Handover captured. In the production app, this would add a timeline event and clear the possible-gap message.');
+}
+function finalise(){
+  if(!document.getElementById('confirm').checked){
+    alert('Please review the note and confirm accuracy before finalising.');
+    return;
+  }
+  go('done');
+}
+</script>
+</body>
+</html>
