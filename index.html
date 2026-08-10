@@ -1,231 +1,34 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CareNote AI Prototype v1</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CareNote AI Prototype v2</title>
 <style>
-:root{
-  --bg:#f5f8fc; --card:#ffffff; --text:#17324d; --muted:#6f8296;
-  --blue:#2f6fe4; --blue2:#eaf2ff; --green:#28a66a; --amber:#d9901a;
-  --purple:#7b61d1; --line:#dce6f1; --danger:#c84a4a;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
-.app{max-width:430px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:0 0 40px rgba(30,60,90,.12)}
-.topbar{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:white;z-index:4}
-.brand{font-weight:800;font-size:20px}.brand span{color:var(--blue)}
-.screen{display:none;padding:18px 18px 90px}.screen.active{display:block}
-h1{font-size:24px;margin:6px 0 4px}h2{font-size:18px;margin:18px 0 10px}.sub{color:var(--muted);font-size:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 6px 20px rgba(35,70,100,.05)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{padding:14px;border-radius:16px;background:#f9fbfe;border:1px solid var(--line)}
-.stat b{display:block;font-size:22px;margin-top:4px}
-.btn{width:100%;border:0;border-radius:14px;padding:15px 16px;font-weight:700;font-size:16px;cursor:pointer;margin-top:10px}
-.primary{background:var(--blue);color:white}.secondary{background:var(--blue2);color:var(--blue)}
-.ghost{background:#f5f8fc;color:var(--text);border:1px solid var(--line)}
-.danger{background:#fff0f0;color:var(--danger)}
-.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.quick button{padding:16px;border-radius:16px;border:1px solid var(--line);background:white;text-align:left;font-weight:700;color:var(--text)}
-label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
-input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;font:inherit;color:var(--text);background:white}
-textarea{min-height:100px;resize:vertical}
-.progress{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.pill{white-space:nowrap;font-size:12px;padding:7px 10px;border-radius:999px;background:#f1f5f9;color:var(--muted);border:1px solid var(--line)}
-.pill.done{background:#eaf8f1;color:var(--green);border-color:#ccebdc}
-.timeline{position:relative;margin-top:10px}
-.event{border-left:3px solid var(--blue);padding:0 0 0 14px;margin:14px 0}
-.event small{color:var(--muted)} .event b{display:block;margin:2px 0 4px}
-.mic{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;width:66px;height:66px;border-radius:50%;border:0;background:var(--purple);color:#fff;font-size:28px;box-shadow:0 10px 24px rgba(70,50,160,.3);z-index:5;cursor:pointer}
-.bottom-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.listen{width:110px;height:110px;border-radius:50%;background:var(--purple);color:white;display:flex;align-items:center;justify-content:center;font-size:42px;margin:28px auto 14px;box-shadow:0 14px 30px rgba(90,60,180,.25)}
-.note{background:#f9fbfe;border:1px solid var(--line);border-radius:14px;padding:14px;line-height:1.55}
-.badge{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700}
-.green{background:#eaf8f1;color:var(--green)}.amber{background:#fff5e5;color:var(--amber)}
-.footer-note{font-size:12px;color:var(--muted);text-align:center;margin-top:20px}
-</style>
-</head>
-<body>
-<div class="app">
-  <div class="topbar">
-    <div class="brand">CareNote <span>AI</span></div>
-    <div id="status" class="badge green">Prototype v1</div>
-  </div>
+:root{--b:#1769ff;--bg:#f6f8fc;--c:#fff;--t:#172033;--m:#6f7a8d;--l:#e4e9f2;--g:#16a36a;--a:#e9a23b;--p:#7457ff;--r:#d94d4d}*{box-sizing:border-box}body{margin:0;background:linear-gradient(#eef4ff,#f6f8fc 230px);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--t)}.app{max-width:430px;min-height:100vh;margin:auto;background:var(--bg);box-shadow:0 0 50px #0001;position:relative;overflow:hidden}header{position:sticky;top:0;z-index:20;padding:18px 17px 10px;background:#f6f8fcee;backdrop-filter:blur(10px)}.brand{display:flex;gap:10px;align-items:center;font-size:20px;font-weight:800}.logo{width:36px;height:36px;border-radius:12px;background:var(--b);color:white;display:grid;place-items:center}.tag{font-size:11px;color:var(--m);font-weight:500;margin-top:2px}main{padding:14px 16px 110px}.screen{display:none}.screen.active{display:block}.card{background:var(--c);border:1px solid var(--l);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 8px 25px #1737640d}.hero{background:linear-gradient(135deg,#1769ff,#4b8dff);color:white;border:none}.muted{font-size:14px;color:var(--m);line-height:1.45}.hero .muted{color:#ffffffcc}h2{margin:0 0 7px;font-size:22px}h3{margin:0 0 7px;font-size:16px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.btn{border:none;border-radius:14px;padding:14px 15px;font-size:15px;font-weight:800;cursor:pointer;width:100%}.primary{background:var(--b);color:white}.secondary{background:#eaf1ff;color:var(--b)}.light{background:white;color:var(--t);border:1px solid var(--l)}.small{width:auto;padding:10px 12px;font-size:13px}.pill{display:inline-flex;padding:6px 9px;border-radius:99px;font-size:12px;font-weight:800}.green{background:#eaf8f2;color:var(--g)}.blue{background:#eaf1ff;color:var(--b)}.amber{background:#fff4e2;color:#ae741d}.purple{background:#f0edff;color:var(--p)}.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.kpi{background:white;border:1px solid var(--l);border-radius:16px;padding:14px}.kpi b{font-size:24px;display:block;margin:3px 0 6px}.field{margin-bottom:13px}label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid #dfe5ee;border-radius:13px;padding:13px;font:inherit;background:white;color:var(--t)}textarea{min-height:110px;resize:vertical}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.back{border:none;background:none;color:var(--b);font-weight:800;padding:0}.timeline{padding-left:20px;position:relative}.timeline:before{content:"";position:absolute;left:6px;top:8px;bottom:12px;width:2px;background:#dfe7f3}.event{position:relative;background:white;border:1px solid var(--l);border-radius:16px;padding:13px;margin-bottom:10px}.event:before{content:"";position:absolute;left:-18px;top:18px;width:10px;height:10px;border-radius:50%;background:var(--b);border:3px solid var(--bg)}.eh{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}.time{font-size:13px;font-weight:800}.cat{font-size:12px;font-weight:800;color:var(--b)}.et{font-size:14px;line-height:1.45}.meta{display:flex;gap:6px;margin-top:8px}.progress{height:8px;border-radius:99px;background:#e8edf5;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;width:48%;background:var(--g)}.micbar{position:fixed;z-index:40;left:50%;bottom:62px;transform:translateX(-50%);width:min(398px,calc(100% - 28px));background:#fffffff7;border:1px solid var(--l);border-radius:23px;padding:9px;display:flex;gap:10px;align-items:center;box-shadow:0 12px 35px #182f5325}.mic{width:60px;height:60px;border-radius:50%;border:none;background:var(--b);color:white;font-size:25px}.miccopy{flex:1}.miccopy b{display:block;font-size:14px}.miccopy span{font-size:12px;color:var(--m)}.hidden{display:none!important}.voice{text-align:center;padding:28px 18px;background:linear-gradient(#eff5ff,#fff)}.orb{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;background:var(--b);color:white;display:grid;place-items:center;font-size:35px;box-shadow:0 10px 28px #1769ff55}.wave{height:34px;display:flex;gap:4px;align-items:center;justify-content:center;margin:10px}.wave i{display:block;width:4px;background:var(--b);border-radius:6px;animation:w 1s infinite}.wave i:nth-child(1){height:9px}.wave i:nth-child(2){height:20px}.wave i:nth-child(3){height:28px}.wave i:nth-child(4){height:15px}.wave i:nth-child(5){height:23px}@keyframes w{50%{transform:scaleY(.45);opacity:.55}}.note{background:#fbfcfe;border:1px solid var(--l);border-radius:14px;padding:14px;font-size:14px;line-height:1.55;white-space:pre-wrap}.alert{background:#fff7e8;border:1px solid #f1d197;border-radius:14px;padding:13px;font-size:13px;line-height:1.45}.success{background:#ebf9f2;border-color:#b7e7d0}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(430px,100%);display:grid;grid-template-columns:repeat(4,1fr);background:#fffffff8;border-top:1px solid var(--l);padding:7px 8px 9px;z-index:30}.nav button{border:none;background:none;color:var(--m);font-size:11px;padding:6px}.nav b{display:block;font-size:18px;margin-bottom:2px}.nav .active{color:var(--b);font-weight:800}.toast{position:fixed;top:78px;left:50%;transform:translateX(-50%);background:#172033;color:white;border-radius:11px;padding:10px 13px;font-size:13px;z-index:99;opacity:0;transition:.2s;pointer-events:none}.toast.show{opacity:1}.check{display:flex;gap:9px;font-size:14px;line-height:1.4}.check input{width:auto;margin-top:3px}
+</style></head>
+<body><div class="app"><header><div class="brand"><div class="logo">C</div><div>CareNote AI<div class="tag">Capture in the moment. Document with confidence.</div></div></div></header><main>
+<section id="home" class="screen active"><div class="card hero"><div class="row"><div><div class="muted">Good afternoon</div><h2>Ready for your shift?</h2><div class="muted">Capture as you go. Finish with confidence.</div></div><span class="pill" style="background:#ffffff25">AI ready</span></div></div><div class="kpis"><div class="kpi"><span class="muted">Outstanding notes</span><b>1</b><span class="pill amber">Needs attention</span></div><div class="kpi"><span class="muted">This week</span><b>6</b><span class="pill green">Completed</span></div></div><div class="card"><h3>Start a new shift</h3><p class="muted">Build a live timeline using voice or quick events.</p><button class="btn primary" onclick="go('start')">Start Shift</button></div><div class="card"><div class="row"><div><h3>Reminder</h3><div class="muted">One note from yesterday is not marked submitted.</div></div><span class="pill amber">1</span></div></div></section>
+<section id="start" class="screen"><div class="top"><button class="back" onclick="go('home')">← Back</button><span class="pill blue">New shift</span></div><div class="card"><h2>Start Shift</h2><p class="muted">Use only the minimum information needed.</p><div class="field"><label>Participant identifier</label><input id="participant" value="Participant M"></div><div class="field"><label>Start time</label><input type="time" value="14:00"></div><div class="field"><label>Expected end time</label><input type="time" value="21:00"></div><button class="btn primary" onclick="startShift()">Start Shift</button></div></section>
+<section id="timeline" class="screen"><div class="top"><div><b id="pt">Participant M</b><div class="muted">Shift in progress • 2:00 PM–9:00 PM</div></div><span class="pill green">Active</span></div><div class="card"><div class="row"><div><h3>Documentation progress</h3><div class="muted">Confirmed timeline events</div></div><span class="pill purple">AI-assisted</span></div><div class="progress"><span id="prog"></span></div></div><div id="events" class="timeline"><div class="event"><div class="eh"><span class="time">2:00 PM</span><span class="cat">Handover</span></div><div class="et">Shift commenced and handover was received from outgoing staff. Participant was settled at home.</div><div class="meta"><span class="pill green">Confirmed</span></div></div><div class="event"><div class="eh"><span class="time">3:15 PM</span><span class="cat">Community Access</span></div><div class="et">Participant requested a community drive. Staff supported a 30-minute drive and returned home safely.</div><div class="meta"><span class="pill blue">🎙 Voice</span><span class="pill green">Confirmed</span></div></div><div class="event"><div class="eh"><span class="time">5:45 PM</span><span class="cat">Meal</span></div><div class="et">Participant was offered dinner and consumed sausages. Vegetables were declined.</div><div class="meta"><span class="pill blue">🎙 Voice</span><span class="pill green">Confirmed</span></div></div></div><div class="card"><div class="row"><button class="btn secondary small" onclick="go('add')">+ Add Event</button><button class="btn light small" onclick="go('incident')">Incident</button><button class="btn light small" onclick="go('review')">End Shift</button></div></div></section>
+<section id="voice" class="screen"><div class="top"><button class="back" onclick="go('timeline')">← Back</button><span class="pill purple">Voice Capture</span></div><div class="card voice"><div class="orb">🎙</div><h2>Listening…</h2><div class="wave"><i></i><i></i><i></i><i></i><i></i></div><p class="muted">Speak naturally. CareNote AI will suggest structured events for review.</p><div class="note" style="text-align:left">“At about seven I supported him with his evening medication, then afterwards he watched TV in the living room.”</div><button class="btn primary" style="margin-top:14px" onclick="go('aireview')">Stop & Review</button><button class="btn light" style="margin-top:8px" onclick="go('timeline')">Cancel</button></div></section>
+<section id="aireview" class="screen"><div class="top"><button class="back" onclick="go('voice')">← Back</button><span class="pill purple">AI Review</span></div><div class="card"><h2>2 events detected</h2><p class="muted">Nothing enters the timeline until you confirm it.</p></div><div class="card"><div class="row"><b>7:00 PM</b><span class="pill blue">Medication</span></div><div class="field" style="margin-top:10px"><label>Suggested event</label><textarea id="ai1">Participant was supported with scheduled evening medication.</textarea></div></div><div class="card"><div class="row"><b>7:10 PM</b><span class="pill blue">Activity</span></div><div class="field" style="margin-top:10px"><label>Suggested event</label><textarea id="ai2">Participant spent time watching television in the living room.</textarea></div></div><button class="btn primary" onclick="confirmAI()">Confirm Both Events</button><button class="btn light" style="margin-top:8px" onclick="go('timeline')">Discard</button></section>
+<section id="add" class="screen"><div class="top"><button class="back" onclick="go('timeline')">← Back</button><span class="pill blue">Quick Add</span></div><div class="card"><h2>Add Event</h2><div class="field"><label>Category</label><select id="cat"><option>Activity</option><option>Meal/Snack</option><option>Medication</option><option>Personal Care</option><option>Toileting</option><option>Community Access</option><option>Behaviour/Presentation</option><option>Sleep</option><option>Handover</option><option>Incident</option><option>Other</option></select></div><div class="field"><label>Time</label><input id="etime" type="time" value="20:00"></div><div class="field"><label>What happened?</label><textarea id="detail" placeholder="Enter only what you observed or did."></textarea></div><button class="btn primary" onclick="addEvent()">Save Event</button></div></section>
+<section id="incident" class="screen"><div class="top"><button class="back" onclick="go('timeline')">← Back</button><span class="pill amber">Incident Assistant</span></div><div class="card"><h2>Incident Assistant</h2><p class="muted">Record facts only. AI will not invent causes, injuries, witnesses, diagnoses or motives.</p></div><div class="card"><div class="field"><label>What happened?</label><textarea>Participant removed the seatbelt while the vehicle was moving.</textarea></div><div class="field"><label>Immediate response</label><textarea>Staff safely pulled over, redirected the participant and supported the seatbelt to be secured.</textarea></div><div class="field"><label>Participant outcome</label><textarea>Participant complied and the remainder of the drive was completed safely.</textarea></div><button class="btn primary" onclick="go('incidentdraft')">Generate Incident Draft</button></div></section>
+<section id="incidentdraft" class="screen"><div class="top"><button class="back" onclick="go('incident')">← Back</button><span class="pill purple">AI Draft</span></div><div class="card"><h2>Review incident draft</h2><div class="alert">AI has structured only the information provided. Review it before saving.</div><div class="note" style="margin-top:12px">During community access, the participant removed the seatbelt while the vehicle was in motion. Staff responded by safely pulling over, redirecting the participant and supporting the seatbelt to be secured. The participant complied and the remainder of the drive was completed safely.</div><button class="btn primary" style="margin-top:14px" onclick="saveIncident()">Save Incident Draft</button></div></section>
+<section id="review" class="screen"><div class="top"><button class="back" onclick="go('timeline')">← Back</button><span class="pill blue">End Shift</span></div><div class="card"><h2>Review your timeline</h2><p class="muted">Check confirmed events before generating your note.</p></div><div class="card"><div class="alert"><b>Possible gap</b><br>No personal-care event has been recorded. Add one if relevant, or mark it not applicable.</div><div class="row" style="margin-top:12px"><button class="btn secondary small" onclick="go('add')">Add Event</button><button class="btn light small" onclick="toast('Marked as not applicable')">Not applicable</button></div></div><div class="card"><div class="row"><b>Confirmed events</b><span class="pill green">5</span></div><p class="muted" style="margin-top:8px">Handover • Community Access • Meal • Medication • Activity</p></div><button class="btn primary" onclick="go('generated')">Generate Professional Note</button></section>
+<section id="generated" class="screen"><div class="top"><button class="back" onclick="go('review')">← Back</button><span class="pill purple">AI-generated</span></div><div class="card"><h2>Review & Edit Note</h2><p class="muted">This draft uses confirmed timeline events only.</p><textarea id="note" style="min-height:300px">Shift commenced at 2:00 pm and handover was received from outgoing staff. Participant was settled at home.
 
-  <section id="home" class="screen active">
-    <div class="sub">Good evening</div>
-    <h1>Ready for your shift?</h1>
-    <div class="grid">
-      <div class="stat"><span class="sub">Outstanding notes</span><b>1</b></div>
-      <div class="stat"><span class="sub">Incident drafts</span><b>0</b></div>
-    </div>
-    <div class="card">
-      <b>Today</b>
-      <p class="sub">No active shift</p>
-      <button class="btn primary" onclick="go('start')">+ Start New Shift</button>
-    </div>
-    <h2>Quick actions</h2>
-    <div class="quick">
-      <button onclick="go('voice')">🎤<br/>Voice Capture</button>
-      <button onclick="alert('Incident flow will be added in Prototype v2')">⚠️<br/>Incident Report</button>
-      <button onclick="go('history')">📄<br/>Previous Notes</button>
-      <button onclick="alert('Reminder centre will be added in Prototype v2')">⏰<br/>Reminders</button>
-    </div>
-    <p class="footer-note">Capture in the moment. Document with confidence.</p>
-  </section>
+At approximately 3:15 pm, the participant requested a community drive. Staff supported a 30-minute drive and returned home safely.
 
-  <section id="start" class="screen">
-    <button class="btn ghost" onclick="go('home')">← Back</button>
-    <h1>Start New Shift</h1>
-    <p class="sub">Only the essentials.</p>
-    <label>Participant ID / initials</label>
-    <input id="participant" value="M****"/>
-    <label>Shift type</label>
-    <select><option>Afternoon</option><option>Morning</option><option>Evening</option><option>Night</option></select>
-    <div class="grid">
-      <div><label>Start time</label><input value="2:00 PM"/></div>
-      <div><label>Expected finish</label><input value="9:00 PM"/></div>
-    </div>
-    <label>Optional handover note</label>
-    <textarea placeholder="Short handover summary..."></textarea>
-    <button class="btn primary" onclick="go('timeline')">Start Shift</button>
-  </section>
+At approximately 5:45 pm, the participant was offered dinner and consumed sausages. Vegetables were declined.
 
-  <section id="timeline" class="screen">
-    <div class="sub">Current shift</div>
-    <h1>2:00 PM — 9:00 PM</h1>
-    <p class="sub">Participant: <span id="pDisplay">M****</span></p>
+At 7:00 pm, the participant was supported with scheduled evening medication.
 
-    <h2>Documentation progress</h2>
-    <div class="progress">
-      <span class="pill done">✓ Activities</span>
-      <span class="pill done">✓ Meals</span>
-      <span class="pill done">✓ Medication</span>
-      <span class="pill">Personal Care</span>
-      <span class="pill">Handover</span>
-    </div>
-
-    <h2>Smart Timeline</h2>
-    <div class="timeline" id="timelineEvents">
-      <div class="event"><small>2:05 PM · Handover</small><b>Shift commenced</b><span class="sub">Received handover and participant was settled.</span></div>
-      <div class="event"><small>3:15 PM · Community Access</small><b>Community drive</b><span class="sub">Community drive facilitated. Participant remained calm.</span></div>
-      <div class="event"><small>5:30 PM · Meal</small><b>Dinner provided</b><span class="sub">Sausages and vegetables offered. Participant ate well.</span></div>
-      <div class="event"><small>7:00 PM · Medication</small><b>Scheduled medication</b><span class="sub">Medication event recorded.</span></div>
-    </div>
-
-    <div class="bottom-actions">
-      <button class="btn secondary" onclick="addEvent()">+ Add Event</button>
-      <button class="btn primary" onclick="go('reviewShift')">Generate Note</button>
-    </div>
-    <button class="mic" onclick="go('voice')" aria-label="Voice capture">🎤</button>
-  </section>
-
-  <section id="voice" class="screen">
-    <button class="btn ghost" onclick="go('timeline')">← Back to Timeline</button>
-    <h1>Voice Capture</h1>
-    <p class="sub">Speak naturally. CareNote AI will organise the event for you.</p>
-    <div class="listen">🎤</div>
-    <div class="card">
-      <b>Listening...</b>
-      <p class="sub" id="transcript">“At around 8:20 pm Mitchell had a shower and changed into night clothes.”</p>
-    </div>
-    <button class="btn primary" onclick="go('aiReview')">Use Transcript</button>
-    <button class="btn ghost" onclick="go('timeline')">Cancel</button>
-  </section>
-
-  <section id="aiReview" class="screen">
-    <button class="btn ghost" onclick="go('voice')">← Back</button>
-    <h1>Review AI suggestion</h1>
-    <p class="sub">AI suggests. You confirm.</p>
-    <div class="card">
-      <label>Time</label><input value="8:20 PM"/>
-      <label>Category</label><select><option>Personal Care</option><option>Activity</option><option>Meal</option><option>Medication</option></select>
-      <label>Summary</label><input value="Evening personal care"/>
-      <label>Details</label><textarea>Participant was supported with a shower and changed into night clothing.</textarea>
-    </div>
-    <button class="btn primary" onclick="confirmEvent()">Add to Timeline</button>
-    <button class="btn danger" onclick="go('timeline')">Discard</button>
-  </section>
-
-  <section id="reviewShift" class="screen">
-    <button class="btn ghost" onclick="go('timeline')">← Back to Timeline</button>
-    <h1>End-of-shift review</h1>
-    <div class="card">
-      <b>5 confirmed events</b>
-      <p class="sub">Your timeline is ready to generate into a professional note.</p>
-    </div>
-    <div class="card">
-      <span class="badge amber">Possible gap</span>
-      <h2 style="margin-top:10px">No handover event recorded</h2>
-      <p class="sub">Add one if relevant to this shift.</p>
-      <button class="btn secondary" onclick="addHandover()">+ Add Handover</button>
-    </div>
-    <button class="btn primary" onclick="go('generated')">✨ Generate Professional Note</button>
-  </section>
-
-  <section id="generated" class="screen">
-    <button class="btn ghost" onclick="go('reviewShift')">← Back</button>
-    <h1>Review generated note</h1>
-    <p class="sub">Check accuracy before finalising.</p>
-    <div class="note" contenteditable="true">
-      Shift commenced at 2:00 PM. Handover was received and the participant was settled. At approximately 3:15 PM, a community drive was facilitated and the participant remained calm throughout. Dinner was provided at approximately 5:30 PM, consisting of sausages and vegetables, which the participant ate well. Scheduled medication was recorded at 7:00 PM. At approximately 8:20 PM, the participant was supported with evening personal care, including a shower and change into night clothing. The participant remained settled toward the end of the shift.
-    </div>
-    <label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px">
-      <input type="checkbox" id="confirm" style="width:auto;margin-top:3px"/>
-      <span>I have reviewed this note and confirm it accurately reflects the shift.</span>
-    </label>
-    <button class="btn primary" onclick="finalise()">Finalise Note</button>
-  </section>
-
-  <section id="history" class="screen">
-    <button class="btn ghost" onclick="go('home')">← Back</button>
-    <h1>Notes History</h1>
-    <div class="card"><span class="badge green">Completed</span><h2>8 Aug · 2 PM–9 PM</h2><p class="sub">Participant M****</p></div>
-    <div class="card"><span class="badge amber">Draft</span><h2>7 Aug · 9 PM–7 AM</h2><p class="sub">Participant M****</p></div>
-  </section>
-
-  <section id="done" class="screen">
-    <h1>Note finalised ✓</h1>
-    <div class="card">
-      <b>Shift documentation complete</b>
-      <p class="sub">The note has been reviewed and finalised in this prototype.</p>
-    </div>
-    <button class="btn secondary" onclick="go('history')">View Notes History</button>
-    <button class="btn primary" onclick="go('home')">Return Home</button>
-    <p class="footer-note">Better documentation. Less chasing. Stronger care.</p>
-  </section>
-</div>
-
+Following medication, the participant spent time watching television in the living room. The participant remained settled.</textarea><button class="btn secondary" style="margin-top:10px" onclick="toast('Wording refined without changing facts')">✨ Improve wording</button></div><div class="card"><label class="check"><input id="accuracy" type="checkbox" onchange="toggleFinal()"><span>I have reviewed this note and confirm it accurately reflects the shift.</span></label></div><button id="final" class="btn primary" disabled style="opacity:.45" onclick="go('done')">Finalise Note</button></section>
+<section id="done" class="screen"><div class="card success" style="text-align:center"><div style="font-size:48px">✓</div><h2>Shift note completed</h2><p class="muted">Reviewed, confirmed and finalised.</p></div><div class="kpis"><div class="kpi"><span class="muted">Documentation time</span><b>3m 42s</b><span class="pill green">Completed</span></div><div class="kpi"><span class="muted">Illustrative estimate</span><b>~11m</b><span class="pill blue">Potential time saved</span></div></div><div class="card"><div class="alert">Time-saved figures shown in this prototype are illustrative estimates only.</div></div><button class="btn primary" onclick="copyNote()">Copy Note</button><button class="btn secondary" style="margin-top:8px" onclick="toast('Marked as submitted in CareNote AI')">Mark as Submitted</button><button class="btn light" style="margin-top:8px" onclick="go('history')">View in History</button><button class="btn light" style="margin-top:8px" onclick="go('home')">Return Home</button></section>
+<section id="history" class="screen"><div class="top"><button class="back" onclick="go('home')">← Back</button><span class="pill blue">History</span></div><div class="card"><h2>Notes History</h2><input placeholder="Search notes..."></div><div class="card"><div class="row"><div><b>Today • Participant M</b><div class="muted">2:00 PM–9:00 PM</div></div><span class="pill green">Finalised</span></div></div><div class="card"><div class="row"><div><b>Yesterday • Participant R</b><div class="muted">9:00 PM–7:00 AM</div></div><span class="pill amber">Not submitted</span></div></div><div class="card"><div class="row"><div><b>8 Aug • Participant M</b><div class="muted">1:00 PM–9:00 PM</div></div><span class="pill purple">Incident</span></div></div></section>
+<section id="reminders" class="screen"><div class="top"><button class="back" onclick="go('home')">← Back</button><span class="pill amber">Reminders</span></div><div class="card"><h2>Needs attention</h2></div><div class="card"><div class="row"><div><b>Note not marked submitted</b><div class="muted">Yesterday • Participant R</div></div><button class="btn secondary small" onclick="toast('Reminder resolved')">Resolve</button></div></div><div class="card"><div class="row"><div><b>Incident draft awaiting review</b><div class="muted">8 Aug • Participant M</div></div><button class="btn light small" onclick="go('incidentdraft')">Review</button></div></div></section>
+</main><div id="micbar" class="micbar hidden"><button class="mic" onclick="go('voice')">🎙</button><div class="miccopy"><b>Voice Capture</b><span>Tap and speak naturally</span></div><button class="btn secondary small" onclick="go('add')">+ Add</button></div><nav class="nav"><button id="nHome" class="active" onclick="go('home')"><b>⌂</b>Home</button><button id="nShift" onclick="go('timeline')"><b>◷</b>Shift</button><button id="nHistory" onclick="go('history')"><b>▤</b>History</button><button id="nRem" onclick="go('reminders')"><b>🔔</b>Reminders</button></nav><div id="toast" class="toast"></div></div>
 <script>
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
-  const p=document.getElementById('participant');
-  if(p && document.getElementById('pDisplay')) document.getElementById('pDisplay').textContent=p.value||'M****';
-}
-function addEvent(){
-  alert('Prototype interaction: typed event form will be added next. Use the microphone to test the signature workflow.');
-}
-function confirmEvent(){
-  const wrap=document.getElementById('timelineEvents');
-  const div=document.createElement('div');
-  div.className='event';
-  div.innerHTML='<small>8:20 PM · Personal Care</small><b>Evening personal care</b><span class="sub">Participant was supported with a shower and changed into night clothing.</span>';
-  wrap.appendChild(div);
-  go('timeline');
-}
-function addHandover(){
-  alert('Handover captured. In the production app, this would add a timeline event and clear the possible-gap message.');
-}
-function finalise(){
-  if(!document.getElementById('confirm').checked){
-    alert('Please review the note and confirm accuracy before finalising.');
-    return;
-  }
-  go('done');
-}
-</script>
-</body>
-</html>
+const screens=[...document.querySelectorAll('.screen')];function go(id){screens.forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(id==='home')nHome.classList.add('active');if(['timeline','voice','aireview','add','incident','incidentdraft','review','generated','done'].includes(id))nShift.classList.add('active');if(id==='history')nHistory.classList.add('active');if(id==='reminders')nRem.classList.add('active');micbar.classList.toggle('hidden',id!=='timeline');scrollTo(0,0)}function startShift(){pt.textContent=participant.value||'Participant';go('timeline');toast('Shift started')}function confirmAI(){events.insertAdjacentHTML('beforeend',`<div class="event"><div class="eh"><span class="time">7:00 PM</span><span class="cat">Medication</span></div><div class="et">${ai1.value}</div><div class="meta"><span class="pill blue">🎙 Voice</span><span class="pill green">Confirmed</span></div></div><div class="event"><div class="eh"><span class="time">7:10 PM</span><span class="cat">Activity</span></div><div class="et">${ai2.value}</div><div class="meta"><span class="pill blue">🎙 Voice</span><span class="pill green">Confirmed</span></div></div>`);prog.style.width='75%';go('timeline');toast('2 events added')}function fmt(v){let[h,m]=v.split(':').map(Number),a=h>=12?'PM':'AM';h=h%12||12;return `${h}:${String(m).padStart(2,'0')} ${a}`}function addEvent(){if(!detail.value.trim()){toast('Please describe what happened');return}events.insertAdjacentHTML('beforeend',`<div class="event"><div class="eh"><span class="time">${fmt(etime.value)}</span><span class="cat">${cat.value}</span></div><div class="et">${detail.value}</div><div class="meta"><span class="pill green">Confirmed</span></div></div>`);detail.value='';go('timeline');toast('Event added')}function saveIncident(){go('timeline');toast('Incident draft saved')}function toggleFinal(){final.disabled=!accuracy.checked;final.style.opacity=accuracy.checked?'1':'.45'}function copyNote(){navigator.clipboard&&navigator.clipboard.writeText(note.value);toast('Note copied')}let timer;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>t.classList.remove('show'),1700)}
+</script></body></html>
